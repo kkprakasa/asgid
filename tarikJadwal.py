@@ -17,19 +17,18 @@ for i in range(len(x.findAll('li',{'class':'or-sportshub__item'}))):
     print('memproses '+x.findAll('li',{'class':'or-sportshub__item'})[i].find('a',href=True).attrs['href'].split('/')[2])
     l=tarik('https://id.asiangames2018.id/schedule-results'+x.findAll('li',{'class':'or-sportshub__item'})[i].find('a',href=True).attrs['href'])
     for n in range(len(l.findAll('span', {'class':'dcm-dt'}))):
-        print('proses no'+str(n))
+        #print('proses no'+str(n))
         dataList = {}
         dataList['cabor'] = x.findAll('li',{'class':'or-sportshub__item'})[i].find('a',href=True).attrs['href'].split('/')[2]
-        if n % 2 == 0 :
-            dataList['tanggal'] = re.sub("\s","",l.findAll('span', {'class':'dcm-dt'})[n].text)
-        else :
-            dataList['jam'] = re.sub("\s","",l.findAll('span', {'class':'dcm-dt'})[1].text)
-        dataList['kelas']= re.sub('\W','',l.findAll('span', {'class':'or-evt-phase_evt'})[0].text)
-        dataList['fase'] = re.sub('\W','',l.findAll('span', {'class':'or-evt-phase_ph'})[0].text)
+        dataList['tanggal'] = l.findAll('time')[n]['datetime'].split(" ")[0]
+        dataList['jam'] = l.findAll('time')[n]['datetime'].split(" ")[1]
+        dataList['kelas']= re.sub(r"(\w)([A-Z])", r"\1 \2",re.sub('\W','',l.findAll('span', {'class':'or-evt-phase_evt'})[n].text))
+        dataList['fase'] = re.sub(r"(\w)([A-Z])", r"\1 \2",re.sub('\W','',l.findAll('span', {'class':'or-evt-phase_ph'})[n].text))
+        print( "proses no" +str(n)+" : " +dataList['tanggal'] +" "+ dataList['jam']+" "+ dataList['kelas']+" "+ dataList['fase']+" Selesai")
         dataDict.append(dataList)
 
-keys = athletes[0].keys()
-with open('AtlitAsianGames03.csv', 'wb') as o_f:
+keys = dataDict[0].keys()
+with open('JadwalAG.csv', 'wb') as o_f:
     d_w = csv.DictWriter(o_f, keys)
     d_w.writeheader()
-    d_w.writerows(athletes)
+    d_w.writerows(dataDict)
