@@ -16,7 +16,7 @@ x = tarik('https://id.asiangames2018.id/sport/')
 for i in range(len(x.findAll('li',{'class':'or-sportshub__item'}))):
     print('memproses '+x.findAll('li',{'class':'or-sportshub__item'})[i].find('a',href=True).attrs['href'].split('/')[2])
     l=tarik('https://id.asiangames2018.id/schedule-results'+x.findAll('li',{'class':'or-sportshub__item'})[i].find('a',href=True).attrs['href'])
-    for n in range(len(l.findAll('span', {'class':'dcm-dt'}))):
+    for n in range(len(l.findAll('span', {'class':'orp-scorer-wrap'}))):
         #print('proses no'+str(n))
         dataList = {}
         dataList['cabor'] = x.findAll('li',{'class':'or-sportshub__item'})[i].find('a',href=True).attrs['href'].split('/')[2]
